@@ -12,7 +12,6 @@ import Combine
     private var discoveryTask: Task<Void, Never>?
     private var operationID = UUID()
     private var task: Task<Void, Never>?
-    private var phaseObservation: AnyCancellable?
     private var sessionObservation: AnyCancellable?
     private var lockObserver: NSObjectProtocol?
     private var preferencesObservation: AnyCancellable?
@@ -57,10 +56,6 @@ import Combine
                 KeepAwakeManager.shared.activate(minutes: Defaults.sanitizedDefaultDuration(minutes))
             }
         ))
-        phaseObservation = workflow.$phase.sink { phase in
-            if phase == .idle || phase == .active { ContinuityProgressPanel.shared.hide() }
-            else { ContinuityProgressPanel.shared.show() }
-        }
         sessionObservation = KeepAwakeManager.shared.$isActive.sink { [weak self] active in
             if !active { self?.cancel() }
         }

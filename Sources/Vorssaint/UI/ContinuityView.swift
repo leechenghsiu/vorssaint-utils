@@ -141,25 +141,3 @@ extension ContinuityStrings {
         }
     }
 }
-
-/// Keep cancellation available if the menu closes during handoff.
-/// The service hides this window after the countdown completes.
-@MainActor final class ContinuityProgressPanel {
-    static let shared = ContinuityProgressPanel()
-    private var panel: NSPanel?
-    func show() {
-        if panel == nil {
-            let window = NSPanel(contentRect: NSRect(x: 0, y: 0, width: 420, height: 140),
-                                 styleMask: [.titled, .nonactivatingPanel], backing: .buffered, defer: false)
-            window.title = FeatureStrings.continuity(L10n.shared.language).title
-            window.level = .floating
-            window.hidesOnDeactivate = false
-            window.isReleasedWhenClosed = false
-            window.contentView = NSHostingView(rootView: ContinuityControls().padding(20).frame(width: 420))
-            window.center()
-            panel = window
-        }
-        panel?.orderFrontRegardless()
-    }
-    func hide() { panel?.orderOut(nil) }
-}
