@@ -51,7 +51,11 @@ import Combine
             },
             wait: { try await Task.sleep(nanoseconds: $0 * 1_000_000_000) },
             dim: { KeepAwakeManager.shared.dimForContinuity() },
-            restore: { KeepAwakeManager.shared.restoreContinuityBrightness() }
+            restore: { KeepAwakeManager.shared.restoreContinuityBrightness() },
+            prepareSession: {
+                let minutes = UserDefaults.standard.integer(forKey: DefaultsKey.continuityDuration)
+                KeepAwakeManager.shared.activate(minutes: Defaults.sanitizedDefaultDuration(minutes))
+            }
         ))
         phaseObservation = workflow.$phase.sink { phase in
             if phase == .idle || phase == .active { ContinuityProgressPanel.shared.hide() }
@@ -99,12 +103,13 @@ import Combine
     }
 
     func start() {
-        guard AppFeature.keepAwake.isAvailable, KeepAwakeManager.shared.isActive,
-              task == nil, !discovering, !workflow.busy, workflow.phase != .active else { return }
+        guard AppFeature.keepAwake.isAvailable,
+              task == nil, !discovering, !workflow.busy else { return }
         let defaults = UserDefaults.standard
         let name = (defaults.string(forKey: DefaultsKey.continuityHotspot) ?? "")
             .trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else { return }
+        if workflow.phase == .active { workflow.cancel() }
         let apps = defaults.stringArray(forKey: DefaultsKey.continuityQuitApps) ?? []
         let id = UUID()
         operationID = id

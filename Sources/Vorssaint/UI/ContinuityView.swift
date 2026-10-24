@@ -3,6 +3,20 @@
 import SwiftUI
 import ApplicationServices
 
+@MainActor struct ContinuityCard: View {
+    @ObservedObject private var l10n = L10n.shared
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            sectionTitle(FeatureStrings.continuity(l10n.language).title)
+            VStack(alignment: .leading, spacing: 10) {
+                ContinuityControls()
+                ContinuityOptions()
+            }
+            .panelCard()
+        }
+    }
+}
+
 @MainActor struct ContinuityControls: View {
     @ObservedObject private var l10n = L10n.shared
     @ObservedObject private var workflow = ContinuityService.shared.workflow
@@ -18,8 +32,6 @@ import ApplicationServices
                     Spacer()
                     Button(strings.cancel) { ContinuityService.shared.cancel() }
                         .keyboardShortcut(.cancelAction)
-                } else if workflow.phase == .active {
-                    Text(status).font(.caption).foregroundStyle(.secondary)
                 } else if workflow.phase == .failed(.brightness) {
                     Text(status).font(.caption)
                     Spacer()
@@ -27,7 +39,7 @@ import ApplicationServices
                         .keyboardShortcut(.defaultAction)
                 } else {
                     Button { ContinuityService.shared.start() } label: {
-                        Label(strings.title, systemImage: "iphone.and.arrow.forward")
+                        Label(strings.start, systemImage: "iphone.and.arrow.forward")
                             .frame(maxWidth: .infinity)
                     }
                     .disabled(hotspot.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -62,13 +74,19 @@ import ApplicationServices
     @ObservedObject private var l10n = L10n.shared
     @ObservedObject private var workflow = ContinuityService.shared.workflow
     @AppStorage(DefaultsKey.continuityHotspot) private var hotspot = ""
+    @AppStorage(DefaultsKey.continuityDuration) private var duration = 60
     @State private var apps = UserDefaults.standard.stringArray(forKey: DefaultsKey.continuityQuitApps) ?? []
     @ObservedObject private var service = ContinuityService.shared
     private var strings: ContinuityStrings { FeatureStrings.continuity(l10n.language) }
 
     var body: some View {
-        DisclosureGroup(strings.settingsTitle) {
+        DisclosureGroup {
             VStack(alignment: .leading, spacing: 8) {
+                Picker(l10n.s.keepAwakeTitle, selection: $duration) {
+                    ForEach(DurationPicker.choices, id: \.self) { minutes in
+                        Text(DurationPicker.shortTitle(for: minutes, l10n.s, l10n.language)).tag(minutes)
+                    }
+                }
                 Picker(strings.hotspot, selection: $hotspot) {
                     Text(strings.chooseHotspot).tag("")
                     ForEach(Array(Set(service.hotspots + (hotspot.isEmpty ? [] : [hotspot]))).sorted(), id: \.self) {
@@ -95,8 +113,13 @@ import ApplicationServices
                 Text(strings.help).font(.caption).foregroundStyle(.secondary)
             }
             .padding(.top, 6)
-            .disabled(workflow.busy || workflow.phase == .active)
+            .disabled(workflow.busy)
+        } label: {
+            Text(l10n.s.keepAwakeOptions)
+                .font(.system(size: 11.5, weight: .semibold))
+                .foregroundStyle(.secondary)
         }
+        .onAppear { duration = Defaults.sanitizedDefaultDuration(duration) }
     }
 
     private func save(_ ids: [String]) {

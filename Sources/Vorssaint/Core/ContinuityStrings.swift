@@ -4,6 +4,7 @@
 import Foundation
 
 struct ContinuityStrings {
+    let start: String
     let title: String
     let settingsTitle: String
     let hotspot: String
@@ -52,6 +53,7 @@ extension FeatureStrings {
 
 extension ContinuityStrings {
     static let enUS = ContinuityStrings(
+        start: "Start handoff",
         title: "Handoff to iPhone",
         settingsTitle: "Handoff options",
         hotspot: "iPhone hotspot",
@@ -77,6 +79,7 @@ extension ContinuityStrings {
     )
 
     static let ptBR = ContinuityStrings(
+        start: "Iniciar continuidade",
         title: "Continuar no iPhone",
         settingsTitle: "Opções de continuidade",
         hotspot: "Acesso Pessoal do iPhone",
@@ -102,6 +105,7 @@ extension ContinuityStrings {
     )
 
     static let tr = ContinuityStrings(
+        start: "Devamlılığı başlat",
         title: "iPhone’a geç",
         settingsTitle: "Geçiş seçenekleri",
         hotspot: "iPhone kişisel erişim noktası",
@@ -127,6 +131,7 @@ extension ContinuityStrings {
     )
 
     static let ru = ContinuityStrings(
+        start: "Начать передачу",
         title: "Перейти на iPhone",
         settingsTitle: "Параметры перехода",
         hotspot: "Точка доступа iPhone",
@@ -152,6 +157,7 @@ extension ContinuityStrings {
     )
 
     static let es = ContinuityStrings(
+        start: "Iniciar transferencia",
         title: "Continuar en el iPhone",
         settingsTitle: "Opciones de continuidad",
         hotspot: "Punto de acceso del iPhone",
@@ -177,6 +183,7 @@ extension ContinuityStrings {
     )
 
     static let sk = ContinuityStrings(
+        start: "Spustiť odovzdanie",
         title: "Prejsť na iPhone",
         settingsTitle: "Možnosti prechodu",
         hotspot: "Osobný hotspot iPhonu",
@@ -202,6 +209,7 @@ extension ContinuityStrings {
     )
 
     static let de = ContinuityStrings(
+        start: "Übergabe starten",
         title: "Zum iPhone wechseln",
         settingsTitle: "Übergabeoptionen",
         hotspot: "iPhone-Hotspot",
@@ -227,6 +235,7 @@ extension ContinuityStrings {
     )
 
     static let fr = ContinuityStrings(
+        start: "Démarrer le transfert",
         title: "Passer à l’iPhone",
         settingsTitle: "Options de transfert",
         hotspot: "Partage de connexion de l’iPhone",
@@ -252,6 +261,7 @@ extension ContinuityStrings {
     )
 
     static let it = ContinuityStrings(
+        start: "Avvia trasferimento",
         title: "Passa a iPhone",
         settingsTitle: "Opzioni di passaggio",
         hotspot: "Hotspot di iPhone",
@@ -277,6 +287,7 @@ extension ContinuityStrings {
     )
 
     static let ja = ContinuityStrings(
+        start: "引き継ぎを開始",
         title: "iPhoneに引き継ぐ",
         settingsTitle: "引き継ぎオプション",
         hotspot: "iPhoneのインターネット共有",
@@ -302,6 +313,7 @@ extension ContinuityStrings {
     )
 
     static let ko = ContinuityStrings(
+        start: "이어받기 시작",
         title: "iPhone으로 이어가기",
         settingsTitle: "이어가기 옵션",
         hotspot: "iPhone 개인용 핫스팟",
@@ -327,6 +339,7 @@ extension ContinuityStrings {
     )
 
     static let zhHans = ContinuityStrings(
+        start: "开始接力",
         title: "接力到手机",
         settingsTitle: "接力选项",
         hotspot: "iPhone 个人热点",
@@ -352,6 +365,7 @@ extension ContinuityStrings {
     )
 
     static let zhTW = ContinuityStrings(
+        start: "開始接力",
         title: "接力到手機",
         settingsTitle: "接力選項",
         hotspot: "iPhone 個人熱點",
@@ -377,6 +391,7 @@ extension ContinuityStrings {
     )
 
     static let zhHK = ContinuityStrings(
+        start: "開始接力",
         title: "接力到手機",
         settingsTitle: "接力選項",
         hotspot: "iPhone 個人熱點",
@@ -402,6 +417,7 @@ extension ContinuityStrings {
     )
 
     static let uk = ContinuityStrings(
+        start: "Почати передавання",
         title: "Перейти на iPhone",
         settingsTitle: "Параметри переходу",
         hotspot: "Точка доступу iPhone",

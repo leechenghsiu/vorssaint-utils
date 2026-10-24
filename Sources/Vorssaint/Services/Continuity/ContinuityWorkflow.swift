@@ -20,6 +20,7 @@ enum ContinuityFailure: Error, Equatable {
         var wait: (UInt64) async throws -> Void
         var dim: () -> Bool
         var restore: () -> Void
+        var prepareSession: () -> Void = { }
     }
     @Published private(set) var phase: Phase = .idle
     private let hooks: Hooks
@@ -40,7 +41,9 @@ enum ContinuityFailure: Error, Equatable {
     }
 
     func run(hotspot: String, apps: [String]) async {
-        guard !busy, phase != .active, hooks.isAvailable() else { return }
+        guard !busy, phase != .active, !Task.isCancelled else { return }
+        hooks.prepareSession()
+        guard hooks.isAvailable() else { return }
         generation += 1
         let operation = generation
         func check() throws {
