@@ -54,7 +54,7 @@ import Combine
             restore: { KeepAwakeManager.shared.restoreContinuityBrightness() }
         ))
         phaseObservation = workflow.$phase.sink { phase in
-            if phase == .idle { ContinuityProgressPanel.shared.hide() }
+            if phase == .idle || phase == .active { ContinuityProgressPanel.shared.hide() }
             else { ContinuityProgressPanel.shared.show() }
         }
         sessionObservation = KeepAwakeManager.shared.$isActive.sink { [weak self] active in

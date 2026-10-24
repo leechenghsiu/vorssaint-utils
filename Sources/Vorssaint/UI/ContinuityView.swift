@@ -18,7 +18,9 @@ import ApplicationServices
                     Spacer()
                     Button(strings.cancel) { ContinuityService.shared.cancel() }
                         .keyboardShortcut(.cancelAction)
-                } else if workflow.phase == .active || workflow.phase == .failed(.brightness) {
+                } else if workflow.phase == .active {
+                    Text(status).font(.caption).foregroundStyle(.secondary)
+                } else if workflow.phase == .failed(.brightness) {
                     Text(status).font(.caption)
                     Spacer()
                     Button(strings.restore) { ContinuityService.shared.cancel() }
@@ -117,8 +119,8 @@ extension ContinuityStrings {
     }
 }
 
-/// The menu closes when System Settings opens. Keep progress and cancellation
-/// visible in a small owned window throughout the handoff, including the countdown.
+/// Keep cancellation available if the menu closes during handoff.
+/// The service hides this window after the countdown completes.
 @MainActor final class ContinuityProgressPanel {
     static let shared = ContinuityProgressPanel()
     private var panel: NSPanel?

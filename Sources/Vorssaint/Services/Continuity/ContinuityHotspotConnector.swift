@@ -19,7 +19,7 @@ final class ContinuityHotspotConnector {
     private let accessibility = HotspotAccessibility()
 
     func discover() async throws -> [String] {
-        try openSettings()
+        try await openSettings()
         let deadline = Date().addingTimeInterval(12)
         var names = Set<String>()
         repeat {
@@ -40,7 +40,7 @@ final class ContinuityHotspotConnector {
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw ContinuityHotspotError.unavailable
         }
-        try openSettings()
+        try await openSettings()
         let deadline = Date().addingTimeInterval(30)
         var requested = false
         var diagnostic = "no snapshot"
@@ -69,11 +69,22 @@ final class ContinuityHotspotConnector {
             .first?.processIdentifier
     }
 
-    private func openSettings() throws {
+    private func openSettings() async throws {
         try Task.checkCancellation()
         guard AXIsProcessTrusted() else { throw ContinuityHotspotError.permission }
-        guard let url = URL(string: "x-apple.systempreferences:com.apple.wifi-settings-extension"),
-              NSWorkspace.shared.open(url) else { throw ContinuityHotspotError.unavailable }
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.wifi-settings-extension") else {
+            throw ContinuityHotspotError.unavailable
+        }
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = false
+        configuration.hides = true
+        configuration.addsToRecentItems = false
+        do {
+            _ = try await NSWorkspace.shared.open(url, configuration: configuration)
+        } catch {
+            throw ContinuityHotspotError.unavailable
+        }
+        try Task.checkCancellation()
     }
 }
 

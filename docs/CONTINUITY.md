@@ -11,17 +11,17 @@ Handoff to iPhone connects the Mac to a selected iPhone Personal Hotspot, quits 
 5. Optionally add apps under **Apps to quit**. Vorssaint, Finder, System Settings, and loginwindow are excluded from the quit list.
 6. Start a Keep Awake session, then choose **Handoff to iPhone**.
 
-Both discovery and connection open System Settings in the foreground. Allow its Wi-Fi pane to remain available during the operation. The connector uses the accessibility controls exposed by that pane; it does not collect network passwords.
+Both discovery and connection request the Wi-Fi pane with System Settings hidden and without activating it. System Settings still runs in the background during the operation. The connector uses the accessibility controls exposed by that pane; it does not collect network passwords.
 
 ## Operation and cancellation
 
-A floating progress window keeps cancellation and the countdown visible while System Settings is open.
+A floating progress window keeps cancellation and the countdown visible during handoff, then closes when handoff completes.
 
 The order is connection confirmation → normal app termination → five-second countdown → built-in display brightness set to zero. The connector waits for evidence that the selected hotspot is connected before requesting app termination. A connection failure leaves apps and brightness untouched.
 
 Only selected, currently running regular apps are asked to terminate. This uses normal termination, never force quit. A save dialog, refusal to quit, or failure to finish within the wait period stops the workflow before dimming. Some selected apps may already have exited by that point; save remaining work and retry.
 
-**Cancel** stops further workflow steps. It does not reopen apps or restore the previous Wi-Fi connection. A network connection already requested through System Settings may still complete, and other existing network connections may reconnect. Once dimming is active, **Restore brightness** ends the handoff and requests restoration. Ending Keep Awake or locking the screen also cancels the workflow.
+**Cancel** stops further workflow steps. It does not reopen apps or restore the previous Wi-Fi connection. A network connection already requested through System Settings may still complete, and other existing network connections may reconnect. Once dimming is active, use the keyboard brightness-up key to see the display again. The completed state shows only a status label, without requiring an onscreen restore button. Ending Keep Awake or locking the screen cancels the workflow and requests restoration of the saved brightness. A failed brightness operation still offers a recovery button.
 
 Brightness restoration belongs to the existing Keep Awake lid-dimming manager. It reuses any saved brightness baseline instead of capturing an already dimmed value, persists that baseline for recovery, and retains pending restoration when the display cannot yet accept it. Handoff does not change the existing lid-close policy. It dims only the supported built-in display, not external monitors.
 
@@ -49,4 +49,4 @@ Before release, manually verify on supported macOS versions and hardware:
 - Cancellation during connection, termination, and countdown; verify no delayed response dims the screen afterward.
 - Five-second countdown, brightness restoration, screen locking, Keep Awake ending, app relaunch recovery, and interactions with lid close/open and external displays.
 
-These cases are the broader release checklist, not a claim of complete hardware coverage. On an Apple Silicon Mac with macOS 27.2 and English System Settings, the developer build was manually verified to switch from regular Wi-Fi to the selected iPhone, normally quit Calculator, finish the countdown, dim the built-in display from 0.5625 to 0, and restore it to 0.5625. Missing Accessibility permission and inactive/active button visibility were also checked. Other OS releases, system languages, and lid/external-display combinations still need physical coverage.
+These cases are the broader release checklist, not a claim of complete hardware coverage. On an Apple Silicon Mac with macOS 27.2 and English System Settings, the developer build was manually verified to switch from regular Wi-Fi to the selected iPhone, normally quit Calculator, finish the countdown, dim the built-in display from 0.5625 to 0, and restore it to 0.5625. Missing Accessibility permission and inactive/active button visibility were also checked. A follow-up manual run also completed handoff after launching System Settings from a stopped state with `isHidden == true` and `isActive == false`; the completed UI had no restore button. Other OS releases, system languages, and lid/external-display combinations still need physical coverage.
