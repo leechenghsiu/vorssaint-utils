@@ -2793,6 +2793,8 @@ struct KeepAwakeCard: View {
                     }
                 }
 
+                if awake.isActive { ContinuityControls() }
+
                 optionsDisclosure
 
                 Divider()
@@ -2847,6 +2849,7 @@ struct KeepAwakeCard: View {
                         title: l10n.s.keepAwakeAutoStart,
                         isOn: $keepAwakeAutoStart
                     )
+                    ContinuityOptions()
                     automationDisclosure
                     compactOptionToggle(
                         icon: "cursorarrow.motionlines",
